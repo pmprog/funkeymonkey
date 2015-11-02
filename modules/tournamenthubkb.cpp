@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sys/socket.h>
 #include <array>
+#include <list>
 #include <pthread.h>
 
 void createsocket();
@@ -40,15 +41,15 @@ void handle(input_event const& e)
 		// Release keys until none left "depressed"
 		while( !depressedkeys.empty() )
 		{
-			out->send(EV_KEY, depressedkeys.front, 0);
+			out->send(EV_KEY, depressedkeys.front(), 0);
 			depressedkeys.pop_front();
 		}
-		
+
 		// TODO: Redirect keys to TournamentHub Overlay
-		
+
 	} else {
 		out->send(e.type, e.code, e.value);
-		
+
 		if( e.value == 1 )
 		{
 			// Log depressed key for unpressing
@@ -58,7 +59,7 @@ void handle(input_event const& e)
 			depressedkeys.remove( e.code );
 		}
 	}
-	
+
 }
 void destroy()
 {
